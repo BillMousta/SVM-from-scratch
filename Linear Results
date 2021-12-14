@@ -1,0 +1,23 @@
+
+C = 0.001, kernel = linear_kernel
+Score = 50.49079754601227
+C = 0.01, kernel = linear_kernel
+Score = 50.49079754601227
+C = 0.1, kernel = linear_kernel
+Score = 50.49079754601227
+C = 1, kernel = linear_kernel
+Score = 50.49079754601227
+C = 2, kernel = linear_kernel
+Score = 50.49079754601227
+C = 4, kernel = linear_kernel
+Score = 50.49079754601227
+C = 8, kernel = linear_kernel
+Score = 50.49079754601227
+C = 16, kernel = linear_kernel
+Score = 50.49079754601227
+C = 32, kernel = linear_kernel
+Score = 50.49079754601227
+C = 64, kernel = linear_kernel
+Score = 50.49079754601227
+C = 128, kernel = linear_kernel
+Score = 50.49079754601227

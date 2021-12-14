@@ -1,0 +1,9 @@
+
+C = 0.001, kernel = RBF, gamma 0.5
+Score = 50.981595092024534
+C = 0.001, kernel = RBF, gamma 1
+Score = 49.5398773006135
+C = 0.001, kernel = RBF, gamma 2
+Score = 49.23312883435583
+C = 0.001, kernel = RBF, gamma 4
+Score = 49.509202453987726
