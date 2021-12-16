@@ -13,16 +13,17 @@ from sklearn import metrics
 
 def store_data(name, start, end, interval):
     filename = name + '.csv'
+    # filename = 'SPY test.csv'
     # data = yf.download(name, start=start, end=end, interval=interval)
     # Write data
     # data.to_csv(filename, encoding='utf-8', date_format='%Y-%m-%d')
     # Read from .csv file instead of yahoo finance
     data = pd.read_csv(filename, parse_dates=True, index_col='Date')
-    # data.drop(['Open','High', 'Low', 'Close'], axis=1, inplace= True)
     data = add_features(data)
     # Adding Labels
     data = add_labels(data)
     # data = data.drop(['Adj Close'], axis=1)
+    data.drop(['Adj Close', 'Open', 'High', 'Low', 'Close', 'Volume'], axis=1, inplace=True)
     return data
 
 """
@@ -34,6 +35,7 @@ def add_features(data):
     data['Daily Low Return'] = data['Low'].pct_change(1)
     data['Daily High-Close Return'] = (data['High'] - data['Close'])/data['Close']
     data['Daily Close-Low Return'] = (data['Close'] - data['Low'])/data['Close']
+    data['Daily Volume'] = data['Volume'].pct_change(1)
     data['MA 7'] = data['Close'].rolling(7).mean().shift(-7)
     # plt.hist(data['Daily Return'], bins=50)
     # plt.show()
@@ -49,30 +51,39 @@ according with: if MA 7.shift(-7) > 0.003
                     -1 
 """
 def add_labels(data):
+    print(data['Adj Close'])
     movements = []
     movement = (data['MA 7'] - data['Adj Close'])/ (data['Adj Close'])
+    print(movement)
     for move in movement:
         # Buying signal
-        if move > 0.003:
+        if move > 0.05:
             movements.append(1)
         else:  # Selling signal
             movements.append(-1)
 
     data['Label'] = movements
-    data.drop(['Adj Close', 'MA 7'], axis=1, inplace=True)
+    # Visualizations.visualize_class_distribution(data['Label'], 'test')
+    # data.drop(['Adj Close', 'MA 7'], axis=1, inplace=True)
     return data
 
 
-def processing_data(name):
-    data = store_data(name, start='2000-01-01', end='2020-12-31', interval='1d')
+def processing_data(name, start, end, interval):
+    data = store_data(name, start=start, end=end, interval=interval)
     y = data['Label'].to_numpy()
     data.drop(['Label'], axis=1, inplace=True)
+    # print(data)
     X = data.to_numpy()
 
     # Standardlization
     scaler = preprocessing.StandardScaler()
     X = scaler.fit_transform(X)
 
+    # Normalization Min Max Scaler
+    # min_max_scaler = preprocessing.MinMaxScaler()
+    # X = min_max_scaler.fit_transform(X)
+
+    # print(X)
     return X, y
 
 
@@ -101,9 +112,9 @@ def cross_validation_split(dataset, labels, n_folds):
 
 if __name__ == '__main__':
     visual = Visualizations
-    processing_data('SPY')
-    # sp500 = store_data('SPY', start='2000-01-01', end='2020-12-31', interval='1d')
+    # processing_data('SPY', start='2000-01-01', end='2021-12-01', interval='1d')
+    sp500 = store_data('SPY', start='2000-01-01', end='2021-01-01', interval='1d')
     # print(sp500)
     # visual.visualize_data(sp500)
-    # visual.visualize_class_distribution(sp500['Label'], 'Classes')
+    visual.visualize_class_distribution(sp500['Label'], 'Classes')
     # visual.histogram(sp500)
