@@ -1,0 +1,4 @@
+C = 0.001, kernel = linear_kernel
+Score = 47.641196013289026
+C = 0.01, kernel = linear_kernel
+Score = 47.641196013289026

@@ -3,13 +3,12 @@ sys.path.append('C:\\Users\\Bill Moustakidis\\anaconda3\\envs\\svm\\lib\\site-pa
 import cvxopt
 import cvxopt.solvers
 import numpy as np
-import DataProcessing
 
 class SVM(object):
     """
     Kernel parameter can be polynomial, RBF etc...
     The C parameter tells the SVM optimization
-    how much you want to avoid misclassifying each training example
+    how much you want to avoid mis-classifying each training example
     tol is the tolerance for support vectors
     """
     def __init__(self, kernel, C, gamma, tol=1e-5):
@@ -35,9 +34,11 @@ class SVM(object):
         K = np.zeros((samples, samples))
         for i in range(samples):
             for j in range(samples):
-                # Find similarities between samples in bigger dimensions
-                # if data is  non-linear separable
-                # K(xi,xj) = φ(xi)*φ(xj)^T where φ(.) is the kernel choice
+                """
+                Find similarities between samples in bigger dimensions
+                if data is  non-linear separable
+                K(xi,xj) = φ(xi)*φ(xj)^T where φ(.) is the kernel choice
+                """
                 if self.kernel == RBF:
                     K[i][j] = self.kernel(data[i], data[j], self.gamma)
                 else:
@@ -50,7 +51,7 @@ class SVM(object):
                    0 <= x_i <= C 
          where Pij = yi * yj * K(xi, xj)
                 y classes -1 or 1
-                q = [1,1,...,1]^T
+                q = [-1,-1,...,-1]^T
                 b = [0,0,...,0]^T               
         """
         P = cvxopt.matrix(np.outer(classes, classes) * K)
@@ -83,8 +84,6 @@ class SVM(object):
         self.a = a[support_vector]
         self.support_vector = data[support_vector]
         self.support_vector_y = classes[support_vector]
-        # print("%d support vectors out of %d points" % (len(self.a), samples))
-
         """
         Get the optimized w and b according with support vectors:
         w_opt = SUM(ai*yi*xi) for linear kernel
@@ -96,7 +95,6 @@ class SVM(object):
                 self.w += self.a[i] * self.support_vector_y[i] * self.support_vector[i]
         else:
             self.w = None
-
 
         self.b = 0
         for n in range(len(self.a)):
@@ -135,44 +133,3 @@ def polynomial_kernel(x, y, p=3):
 
 def RBF(x, y, gamma):
     return np.exp(-gamma*(np.linalg.norm(x-y)**2))
-
-
-if __name__ == '__main__':
-    # Simple Example
-    x_train = np.array([[1,7],[2,8],[3,8], [5,1], [6,-1], [7,3]])
-    y_train = np.array([-1,-1,-1,1,1,1])
-
-    x_test = np.array([[7,3], [1,7]])
-    y_test = np.array([1,-1])
-    clf = SVM(linear_kernel, C=0.01, gamma=0)
-
-    clf.train(x_train, y_train)
-    y_predict = clf.predict(x_test)
-    correct = np.sum(y_predict == y_test)
-    print("%d out of %d predictions correct" % (correct, len(y_predict)))
-    # d = DataProcessing
-    # sp500 = d.store_data('SPY', start='2000-01-01', end='2020-12-31', interval='1d')
-    # X_train, y_train, X_test, y_test = d.processing_data(sp500)
-    # clf = SVM(linear_kernel, C=0.01, gamma=0)
-    #
-    # clf.train(X_train, y_train)
-    # y_predict1 = clf.predict(X_test)
-    # # print(np.sum(y_predict1 == 1))
-    #
-    # correct1 = np.sum(y_predict1 == y_test)
-    # # print("%d out of %d predictions correct" % (correct1, len(y_predict1)))
-    #
-    # clf = SVM(RBF, C=0.001, gamma=3)
-    #
-    # clf.train(X_train, y_train)
-    # y_predict = clf.predict(X_test)
-    # # print(np.sum(y_predict == 1))
-    #
-    # correct = np.sum(y_predict == y_test)
-    # print(np.sum(y_test == 1))
-    #
-    # print("Linear Kernel")
-    # print("%d out of %d predictions correct" % (correct1, len(y_predict1)))
-    # print("RBF kernel")
-    # print("%d out of %d predictions correct" % (correct, len(y_predict)))
-

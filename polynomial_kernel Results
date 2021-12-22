@@ -1,0 +1,4 @@
+C = 0.001, kernel = polynomial_kernel
+Score = 47.87375415282391
+C = 0.01, kernel = polynomial_kernel
+Score = 47.94019933554817

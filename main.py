@@ -5,7 +5,10 @@ import DataProcessing
 import time
 from sklearn import svm
 import Visualizations
-
+from sklearn.metrics import f1_score
+from sklearn.metrics import PrecisionRecallDisplay
+from sklearn.pipeline import make_pipeline
+import TestClassifiers
 """
 Saving results of GridSearch into a txt file
 """
@@ -27,12 +30,8 @@ Algorithm for grid search
 def grid_search(dataset, classes, n_folds):
     fold_data, fold_classes = DataProcessing.cross_validation_split(dataset, classes,  n_folds)
 
-    # param_grid = {'C': [0.1, 0.01, 0.001], 'kernel': ['linear', 'polynomial', 'RBF'], 'gamma': [2, 3, 4]}
-
-    C = [16, 32, 64, 128, 256]
-    # C = [0.001, 0.01, 0.1, 1, 2, 4, 8, 16, 32, 64, 128, 256]
-    # kernel = ['linear_kernel', 'polynomial_kernel', 'RBF']
-    kernel = ['RBF']
+    C = [0.001, 0.01, 0.1, 1, 2, 4, 8, 16, 32, 64, 128, 256]
+    kernel = ['linear_kernel', 'polynomial_kernel', 'RBF']
     gamma = [0.01, 0.1, 0.5, 1, 2, 4, 8, 16, 32, 64, 128]
     max_score = -100
     start = time.time()
@@ -112,15 +111,8 @@ def evaluate_algorithm(fold_data, fold_classes, kernel, gamma, C, n_folds):
         svm = SupportVectorMachine.SVM(kernel, C=C, gamma=gamma)
         svm.train(np.array(X_train), np.array(y_train))
         predicted = svm.predict(np.array(X_test))
-        # clf = svm.SVC(kernel= 'rbf', C=0.1, gamma=0.1)
-        # clf.fit(np.array(X_train), np.array(y_train))
-        # predicted = clf.predict(X_test)
-        # print(len(predicted))
-        # print(predicted[predicted==-1].size)
         accuracy = accuracy_metric(np.array(y_test), predicted)
         scores.append(accuracy)
-
-    print(scores)
 
     # average score for k folds
     return sum(scores)/n_folds
@@ -135,16 +127,9 @@ def accuracy_metric(actual, predicted):
 
 """
 Compare results my svm class with sklearn svm 
+with train data from sp500 2000-2021  and testing data 2021-now
 """
-def compare_with_sklearn_svm():
-    # Get train data 2000-2020 and testing data 2020-2021 for SP500
-    processing = DataProcessing
-    X_train, y_train = processing.processing_data('SPY', start='2000-01-01', end='2020-12-31', interval='1d')
-    X_test, y_test = processing.processing_data('SPY', start='2021-01-01', end='2021-12-01', interval='1d')
-
-    print(X_train.shape)
-    Visualizations.visualize_class_distribution(y_train ,'test')
-
+def compare_with_sklearn_svm(X_train, y_train, X_test, y_test):
     print("----- My SVM -----")
     start = time.time()
     # My SVM with best parameters after grid search for this
@@ -153,9 +138,11 @@ def compare_with_sklearn_svm():
     my_svm.train(X_train, y_train)
     predicted = my_svm.predict(X_test)
     accuracy = accuracy_metric(y_test, predicted)
+    f1 = f1_score(y_test, predicted)
     print("Execution time for my SVM: {:.2f} sec".format(time.time() - start))
 
-    print('Score: {:.2f}%'.format(accuracy))
+    print('Accuracy: {:.2f}%'.format(accuracy))
+    print("F1 score: {:.2f}%".format(f1*100))
 
     # SVM from sklearn library
     start = time.time()
@@ -164,20 +151,37 @@ def compare_with_sklearn_svm():
     sklearn_svm.fit(np.array(X_train), np.array(y_train))
     predicted = sklearn_svm.predict(X_test)
     accuracy = accuracy_metric(y_test, predicted)
-    print('Score: {:.2f}%'.format(accuracy))
+    f1 = f1_score(y_test, predicted)
     print("Execution time for sklearn SVM: {:.2f} sec".format(time.time() - start))
 
+    print('Score: {:.2f}%'.format(accuracy))
+    print("F1 score: {:.2f}%".format(f1*100))
+
+
+def precision_recall(X_train, y_train, X_test, y_test):
+    sklearn_svm = svm.SVC(kernel='rbf', C=128, gamma=0.5)
+    sklearn_svm.fit(np.array(X_train), np.array(y_train))
+    pred = sklearn_svm.predict(X_test)
+    display = PrecisionRecallDisplay.from_predictions(y_test, pred,name='rbf SVC')
+    _ = display.ax_.set_title("2-class Precision-Recall curve")
 
 
 def run():
-    # save_scores('test', 0.1, 1, 'RBF', 3)
     processing = DataProcessing
+    # Get train data 2000-2020 and testing data 2021-now for SP500
+    X_train, y_train = processing.processing_data('SPY', start='2000-01-01', end='2020-12-31', interval='1d')
+    X_test, y_test = processing.processing_data('SPY test', start='2021-01-01', end='2021-12-01', interval='1d')
     n_folds = 5
-    # data, classes = processing.processing_data('SPY', start='2000-01-01', end='2020-12-31', interval='1d')
-    # grid_search(data, classes, n_folds)
-    # scores = evaluate_algorithm(data, classes,  kernel='RBF', gamma=0.1, C=0.1, n_folds=5)
-    # print(scores)
-    compare_with_sklearn_svm()
+    # Grid search for best parameters
+    # grid_search(X_train, y_train, n_folds)
+
+    compare_with_sklearn_svm(X_train, y_train, X_test, y_test)
+    # precision_recall(X_train, y_train, X_test, y_test)
+
+    # test other classifiers
+    # TestClassifiers.testing_classifiers(X_train, y_train, X_test, y_test)
+
+    print("Done!")
 
 
 # Press the green button in the gutter to run the script.

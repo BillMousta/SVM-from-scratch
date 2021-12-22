@@ -1,9 +1,76 @@
-
+C = 0.001, kernel = RBF, gamma 0.01
+Score = 49.20265780730897
+C = 0.001, kernel = RBF, gamma 0.1
+Score = 50.26578073089701
 C = 0.001, kernel = RBF, gamma 0.5
-Score = 50.981595092024534
-C = 0.001, kernel = RBF, gamma 1
-Score = 49.5398773006135
-C = 0.001, kernel = RBF, gamma 2
-Score = 49.23312883435583
-C = 0.001, kernel = RBF, gamma 4
-Score = 49.509202453987726
+Score = 50.53156146179402
+C = 0.01, kernel = RBF, gamma 0.01
+Score = 48.33887043189369
+C = 0.01, kernel = RBF, gamma 0.1
+Score = 49.90033222591362
+C = 0.01, kernel = RBF, gamma 0.5
+Score = 50.6312292358804
+C = 0.01, kernel = RBF, gamma 1
+Score = 50.83056478405315
+C = 0.1, kernel = RBF, gamma 0.01
+Score = 50.43189368770764
+C = 0.1, kernel = RBF, gamma 0.1
+Score = 49.90033222591362
+C = 1, kernel = RBF, gamma 0.01
+Score = 49.96677740863787
+C = 1, kernel = RBF, gamma 0.1
+Score = 49.90033222591362
+C = 2, kernel = RBF, gamma 0.01
+Score = 50.863787375415285
+C = 2, kernel = RBF, gamma 0.1
+Score = 49.90033222591362
+C = 4, kernel = RBF, gamma 0.01
+Score = 49.93355481727575
+C = 4, kernel = RBF, gamma 0.1
+Score = 49.90033222591362
+C = 8, kernel = RBF, gamma 0.01
+Score = 50.13289036544851
+C = 8, kernel = RBF, gamma 0.1
+Score = 49.90033222591362
+C = 16, kernel = RBF, gamma 0.01
+Score = 50.49833887043189
+C = 16, kernel = RBF, gamma 0.01
+Score = 49.76744186046511
+C = 16, kernel = RBF, gamma 0.1
+Score = 51.19601328903654
+C = 16, kernel = RBF, gamma 0.5
+Score = 51.860465116279066
+C = 16, kernel = RBF, gamma 1
+Score = 51.02990033222591
+C = 32, kernel = RBF, gamma 0.01
+Score = 49.667774086378735
+C = 32, kernel = RBF, gamma 0.1
+Score = 51.19601328903654
+C = 32, kernel = RBF, gamma 0.5
+Score = 52.093023255813954
+C = 32, kernel = RBF, gamma 1
+Score = 51.02990033222591
+C = 64, kernel = RBF, gamma 0.01
+Score = 49.269102990033225
+C = 64, kernel = RBF, gamma 0.1
+Score = 51.19601328903654
+C = 64, kernel = RBF, gamma 0.5
+Score = 51.92691029900332
+C = 64, kernel = RBF, gamma 1
+Score = 51.096345514950166
+C = 128, kernel = RBF, gamma 0.01
+Score = 49.70099667774086
+C = 128, kernel = RBF, gamma 0.1
+Score = 51.19601328903654
+C = 128, kernel = RBF, gamma 0.5
+Score = 52.225913621262464
+C = 128, kernel = RBF, gamma 1
+Score = 51.029900332225914
+C = 256, kernel = RBF, gamma 0.01
+Score = 49.63455149501661
+C = 256, kernel = RBF, gamma 0.1
+Score = 51.19601328903654
+C = 256, kernel = RBF, gamma 0.5
+Score = 51.92691029900332
+C = 256, kernel = RBF, gamma 1
+Score = 51.06312292358804
