@@ -1,1 +1,1 @@
-# SVM-by-scratch
+# SVM-from-scratch
